@@ -12,35 +12,13 @@
         die("Connection failed: " . $connection->connect_error);
     }
     $users_fetch = $connection->query("SELECT * FROM `users`");
-    $connection->close();
     // We can convert the result to an array and pass it to the frontend
-
-    /*
+    $connection->close();
+    $users = [];
     while ($user = $users_fetch->fetch_assoc()) {
-      // to access a property like "username" in the user instance
-      echo $user['username'];
-      echo "<br>";
-
-      // We can access as many properties as we like as far as the exists in the user instance
-      echo "email: ".$user['email']." password: ".$user['password'];
-      echo "<br>";
-    } 
-    */
+      array_push($users, $user);
+    }
     
-
-    // try {
-    //     $connection = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    //     // set the PDO error mode to exception
-    //     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    //     echo "Connected successfully";
-    //   } catch(PDOException $e) {
-    //     echo "Connection failed: " . $e->getMessage();
-    //   }
-
-
-  
-    // $connection->close();
-
 ?>
 
 <!DOCTYPE html>
@@ -63,23 +41,22 @@
         </tr>
       </thead>
       <tbody>
-        <?php 
-          if($users_fetch->num_rows > 0){
-            $user_count = 1;
-            while ($user = $users_fetch->fetch_assoc()){ ?>
-
+        <?php
+        $user_count = 1; 
+        foreach ($users as $user) {
+        ?>
             <tr>
-              <td><?= $user_count?></td>
-              <td><?= $user['username'] ?></td>
-              <td><?= $user['email'] ?></td>
-              <td><?= $user['password'] ?></td>
+                <td><?= $user_count?></td>
+                <td><?= $user['username'] ?></td>
+                <td><?= $user['email'] ?></td>
+                <td><?= $user['password'] ?></td>
             </tr>
         <?php
-            $user_count ++; 
-            }
-          } 
+        $user_count ++;
+        }
+         
         ?>
-    
+        
       </tbody>
   </table>
 </body>
